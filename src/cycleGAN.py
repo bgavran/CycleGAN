@@ -23,18 +23,21 @@ class CycleGAN:
                 print(step, end=" ")
                 sys.stdout.flush()
 
-                # if step < 25:
-                #     CycleGAN.c_times = 100
+                if step < 25:
+                    CycleGAN.c_times = 100
+                else:
+                    CycleGAN.c_times = 10
+
                 for i, (translator, dataset) in enumerate(zip(self.translators, self.datasets)):
-                    # for _ in range(CycleGAN.c_times):
-                    #     eta = np.random.rand(batch_size, 1, 1, 1)  # sampling from uniform distribution
-                    #     this_real_image = dataset.next_batch_real(batch_size)
-                    #     other_real_image = self.datasets[not i].next_batch_real(batch_size)
-                    #
-                    #     sess.run(translator.c_optimizer,
-                    #              feed_dict={translator.real_image_this: this_real_image,
-                    #                         translator.real_image_other: other_real_image,
-                    #                         translator.eta: eta})
+                    for _ in range(CycleGAN.c_times):
+                        eta = np.random.rand(batch_size, 1, 1, 1)  # sampling from uniform distribution
+                        this_real_image = dataset.next_batch_real(batch_size)
+                        other_real_image = self.datasets[not i].next_batch_real(batch_size)
+
+                        sess.run(translator.c_optimizer,
+                                 feed_dict={translator.real_image_this: this_real_image,
+                                            translator.real_image_other: other_real_image,
+                                            translator.eta: eta})
 
                     this_real_image = dataset.next_batch_real(batch_size)
                     sess.run(translator.g_optimizer, feed_dict={translator.real_image_this: this_real_image})

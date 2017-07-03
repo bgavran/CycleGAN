@@ -36,7 +36,7 @@ class Animal:
                 self.animal_path.append(os.path.join(dirpath, fname))
 
         # for now only
-        self.animal_path = self.animal_path[:100]
+        self.animal_path = self.animal_path[:]
 
         self.images = np.zeros((len(self.animal_path), self.img_size, self.img_size, 3))
         self.num_examples = len(self.animal_path)
@@ -44,7 +44,10 @@ class Animal:
         for i, img_path in enumerate(self.animal_path):
             if i % 100 == 1:
                 print(i)
-            self.images[i] = self.get_image(img_path, resize_dim=self.img_size)
+            try:
+                self.images[i] = self.get_image(img_path, resize_dim=self.img_size)
+            except ValueError:
+                pass
 
     def get_image(self, path, resize_dim=None):
         img = Data.read_image(path)

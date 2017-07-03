@@ -2,18 +2,18 @@ import tensorflow as tf
 
 
 class FCGenerator:
-    def __init__(self, name="Generator"):
+    def __init__(self, name="Generator", img_size=256):
         self.name = name
-        self.img_size = 256
+        self.img_size = img_size
         self.channels = 3
 
     def __call__(self, image, reuse=None):
         with tf.variable_scope(self.name, reuse=reuse):
-
             image = tf.reshape(image, [-1, self.img_size * self.img_size * self.channels])
 
-            image = tf.layers.dense(image, 1024, activation=tf.nn.relu)
-            image = tf.layers.dense(image, 1024, activation=tf.nn.relu)
+            image = tf.layers.dense(image, 512, activation=tf.nn.relu)
+            image = tf.layers.dense(image, 512, activation=tf.nn.relu)
+            image = tf.layers.dense(image, 512, activation=tf.nn.relu)
             image = tf.layers.dense(image, self.img_size * self.img_size * self.channels, activation=tf.nn.sigmoid)
 
             image = tf.reshape(image, [-1, self.img_size, self.img_size, self.channels])
@@ -21,8 +21,9 @@ class FCGenerator:
 
 
 class ConvGenerator:
-    def __init__(self, name="Generator"):
+    def __init__(self, name="Generator", img_size=256):
         self.name = name
+        self.img_size = img_size
 
     def __call__(self, image, reuse=None):
         with tf.variable_scope(self.name, reuse=reuse):
